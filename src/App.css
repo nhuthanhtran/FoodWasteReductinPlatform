@@ -36,3 +36,164 @@
     transform: rotate(360deg);
   }
 }
+
+/* Ensure Full-Screen Layout */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #141414, #3b1a84); /* Theme Background */
+  color: white;
+  overflow: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Utility Classes for Centering */
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.full-screen {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Button Styles */
+.button-primary {
+  background: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  transition: background 0.3s ease;
+}
+
+.button-primary:hover {
+  background: #0056b3;
+}
+
+.button-secondary {
+  background: transparent;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid white;
+  border-radius: 30px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.button-secondary:hover {
+  background: white;
+  color: #3b1a84;
+}
+
+/* Background Animation */
+body:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(123, 97, 255, 0.5), transparent);
+  z-index: -1;
+  animation: pulse 10s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Layout.css */
+
+/* Sidebar Styling */
+.sidebar {
+  width: 15%;
+  background: #1a1a2e;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-nav .nav-link {
+  color: #bbb;
+  font-size: 18px;
+  padding: 12px 15px;
+  border-radius: 5px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .active-link {
+  background: #3b1a84;
+  color: white;
+}
+
+/* Topbar Styling */
+.topbar {
+  background: #22223b;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #3b1a84;
+}
+
+.topbar-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Button Styling for TopBar */
+.topbar-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Themed Button Colors */
+.donate-btn {
+  background: #3b1a84;
+}
+
+.donate-btn:hover {
+  background: #5a33ab;
+  transform: scale(1.05);
+}
+
+.request-btn {
+  background: #007bff;
+}
+
+.request-btn:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Spacing Between Buttons */
+.me-3 {
+  margin-right: 16px;
+}

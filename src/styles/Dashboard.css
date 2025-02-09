@@ -1,0 +1,65 @@
+/* Dashboard Main Content Styling */
+.dashboard-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #141414, #3b1a84);
+    color: white;
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.dashboard-content {
+    flex: 1;
+    margin-top: 20px;
+}
+
+.dashboard-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+.dashboard-table {
+    background: white;
+    color: black;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-table th {
+    background: #3b1a84;
+    color: white;
+    text-align: center;
+}
+
+.dashboard-table td {
+    text-align: center;
+}
+
+.dashboard-table .donation-type {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.dashboard-table .request-type {
+    color: #ff5733;
+    font-weight: bold;
+}
+
+.action-button {
+    border-radius: 15px;
+    transition: transform 0.2s ease;
+}
+
+.action-button:hover {
+    transform: scale(1.05);
+}

@@ -12,7 +12,8 @@ import HelpReceivedPage from "./pages/HelpReceivedPage"
 import AccountSettingsPage from "./pages/AccountSettingsPage"
 import DonationFormPage from "./pages/DonationFormPage";
 import RequestDonationPage from "./pages/RequestDonationPage";
-import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(true) //set true for demo

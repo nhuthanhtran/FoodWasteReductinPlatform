@@ -5,22 +5,20 @@ import { useNavigate } from "react-router-dom"
 function TopBar({ title }) {
     const navigate = useNavigate()
 
-    const handleMakeDonation = () => {
-        navigate("/make-donation")
-    }
-
-    const handleRequestHelp = () => {
-        navigate("/request-donation")
-    }
-
     return (
-        <Navbar className="bg-light justify-content-between mb-3">
-            <Navbar.Brand>{title}</Navbar.Brand>
+        <Navbar className="topbar">
+            <Navbar.Brand className="topbar-title">{title}</Navbar.Brand>
             <Nav>
-                <Button variant="primary" className="me-2" onClick={handleMakeDonation}>
+                <Button
+                    className="topbar-btn donate-btn me-3"
+                    onClick={() => navigate("/make-donation")}
+                >
                     Make Donation
                 </Button>
-                <Button variant="secondary" onClick={handleRequestHelp}>
+                <Button
+                    className="topbar-btn request-btn"
+                    onClick={() => navigate("/request-donation")}
+                >
                     Request Help
                 </Button>
             </Nav>
@@ -29,4 +27,3 @@ function TopBar({ title }) {
 }
 
 export default TopBar
-

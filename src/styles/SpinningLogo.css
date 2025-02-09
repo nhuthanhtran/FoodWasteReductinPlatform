@@ -1,0 +1,15 @@
+.spinning-logo {
+    width: 80px;
+    height: 80px;
+    animation: spin 4s linear infinite;
+    transform-origin: center;
+}
+
+@keyframes spin {
+    from {
+        transform: rotateY(0deg);
+    }
+    to {
+        transform: rotateY(360deg);
+    }
+}
