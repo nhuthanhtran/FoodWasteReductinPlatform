@@ -14,6 +14,7 @@ import DonationFormPage from "./pages/DonationFormPage";
 import RequestDonationPage from "./pages/RequestDonationPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import DonationConfirmPage from "./pages/DonationConfirmPage";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(true) //set true for demo
@@ -27,6 +28,7 @@ function App() {
             <Container fluid className="p-0">
                 <Routes>
                     <Route path="/" element={<LandingPage />} />
+                    <Route path="/donationconfirmation" element={<DonationConfirmPage />} />
                     <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/dashboard" element={isAuthenticated ? <DashboardPage /> : <Navigate to="/login" />} />
@@ -39,7 +41,7 @@ function App() {
                         path="/account-settings"
                         element={isAuthenticated ? <AccountSettingsPage /> : <Navigate to="/login" />}
                     />
-                    <Route path="/make-donation" element={isAuthenticated ? <DonationFormPage /> : <Navigate to="/login" />} />
+                    <Route path="/make-donation" element={isAuthenticated ? <DonationFormPage /> : <Navigate to="/donationconfirmation" />} />
                     <Route
                         path="/request-donation"
                         element={isAuthenticated ? <RequestDonationPage /> : <Navigate to="/login" />}
