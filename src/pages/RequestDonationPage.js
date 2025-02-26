@@ -13,16 +13,44 @@ function RequestDonationPage() {
         quantity: "",
         urgency: "medium",
         additionalDetails: "",
-        pickupLocation: "",
+        pickupLocation: {
+            street: '',
+            city: '',
+            state: '',
+            zip: ''
+        },
         contactNumber: "",
     })
 
+    const states = [
+        "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+        "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois",
+        "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
+        "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana",
+        "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York",
+        "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+        "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah",
+        "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+    ];
+
     const handleInputChange = (e) => {
-        const { name, value } = e.target
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }))
+        const { name, value, type, checked } = e.target;
+        const [parent, child] = name.split('.');
+
+        if (child) {
+            setFormData((prevState) => ({
+                ...prevState,
+                [parent]: {
+                    ...prevState[parent],
+                    [child]: type === 'checkbox' ? checked : value,
+                },
+            }));
+        } else {
+            setFormData((prevState) => ({
+                ...prevState,
+                [name]: type === 'checkbox' ? checked : value,
+            }));
+        }
     }
 
     const handleSubmit = (e) => {
@@ -86,15 +114,63 @@ function RequestDonationPage() {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Pickup Location</Form.Label>
+                            <Form.Label>Street</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="pickupLocation"
-                                value={formData.pickupLocation}
+                                name="pickupLocation.street"
+                                value={formData.pickupLocation.street}
                                 onChange={handleInputChange}
                                 required
                             />
                         </Form.Group>
+
+                        <Row>
+                            <Col md={4}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>City</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="pickupLocation.city"
+                                        value={formData.pickupLocation.city}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </Form.Group>
+                            </Col>
+
+                            <Col md={4}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>State</Form.Label>
+                                    <Form.Select
+                                        type="text"
+                                        name="pickupLocation.state"
+                                        value={formData.pickupLocation.state}
+                                        onChange={handleInputChange}
+                                        required
+                                    >
+                                        <option value="">Select a State</option>
+                                        {states.map((state) => (
+                                            <option key={state} value={state}>
+                                                {state}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+
+                            <Col md={4}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Zip Code</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="pickupLocation.zip"
+                                        value={formData.pickupLocation.zip}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Contact Number</Form.Label>
