@@ -197,3 +197,11 @@ body:before {
 .me-3 {
   margin-right: 16px;
 }
+
+/*Center the container once field is shortened */
+.center-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
