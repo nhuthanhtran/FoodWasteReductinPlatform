@@ -61,8 +61,8 @@ function DonationFormPage() {
         e.preventDefault()
         // Here you would typically send the form data to your backend
         console.log("Form submitted:", formData)
-        // Navigate back to dashboard after submission
-        navigate("/dashboard")
+        // Navigate back to confirmation page after submission
+        navigate("/donationconfirmation", {state: formData})
     }
 
     return (
