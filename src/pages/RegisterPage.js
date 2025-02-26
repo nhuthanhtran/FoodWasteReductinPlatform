@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Container, Row, Col, Form, Button } from "react-bootstrap"
+import {Container, Row, Col, Form, Button, Image} from "react-bootstrap"
 import { Link } from "react-router-dom"
 
 function RegisterPage() {
@@ -19,7 +19,10 @@ function RegisterPage() {
     return (
         <Container className="mt-5">
             <Row className="justify-content-md-center">
-                <Col md={6}>
+                <Col md={6} className="d-flex justify-content-center align-items-center">
+                    <Image src="/logo.webp" alt="Logo" fluid style={{ maxWidth: "80%", height: "auto" }} />
+                </Col>
+                <Col md={6} style={{textAlign: "center", width: "40%"}}>
                     <h2 className="text-center mb-4">Register for FoodShare</h2>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="formBasicName">
