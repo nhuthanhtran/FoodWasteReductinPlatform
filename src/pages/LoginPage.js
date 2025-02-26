@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Container, Row, Col, Form, Button } from "react-bootstrap"
+import {Container, Row, Col, Form, Button, Image} from "react-bootstrap"
 import { Link } from "react-router-dom"
+import SpinningLogo from "../components/SpinningLogo";
 
 function LoginPage() {
     const [email, setEmail] = useState("")
@@ -17,6 +18,9 @@ function LoginPage() {
     return (
         <Container className="mt-5">
             <Row className="justify-content-md-center">
+                <Col md={6} className="d-flex justify-content-center align-items-center">
+                    <Image src="/logo.webp" alt="Logo" fluid style={{ maxWidth: "80%", height: "auto" }} />
+                </Col>
                 <Col md={6}>
                     <h2 className="text-center mb-4">Login to FoodShare</h2>
                     <Form onSubmit={handleSubmit}>
