@@ -30,7 +30,7 @@ function DonationHistoryPage() {
     return (
         <Container fluid>
             <Row>
-                <Col md={3} lg={2} className="bg-light sidebar">
+                <Col md={3} lg={2} className="sidebar">
                     <LeftNavBar />
                 </Col>
                 <Col md={9} lg={10} className="px-md-4">

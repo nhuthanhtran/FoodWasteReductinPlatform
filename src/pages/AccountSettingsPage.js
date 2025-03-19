@@ -48,7 +48,7 @@ function AccountSettingsPage() {
     return (
         <Container fluid className="vh-100">
             <Row className="h-100">
-                <Col md={3} lg={2} className="bg-light sidebar">
+                <Col md={3} lg={2} className="sidebar">
                     <LeftNavBar />
                 </Col>
                 <Col md={9} lg={10} className="ms-sm-auto px-md-4">

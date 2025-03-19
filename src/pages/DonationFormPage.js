@@ -70,7 +70,7 @@ function DonationFormPage() {
     return (
         <Container fluid>
             <Row>
-                <Col md={3} lg={2} className="bg-light sidebar">
+                <Col md={3} lg={2} className="sidebar">
                     <LeftNavBar/>
                 </Col>
 
