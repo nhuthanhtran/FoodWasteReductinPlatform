@@ -5,6 +5,8 @@
     height: 100vh;
     background: linear-gradient(135deg, #141414, #3b1a84);
     color: white;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
 /* Main Content Area */
@@ -13,11 +15,13 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
+    margin-right: 80px;
 }
 
 .dashboard-content {
     flex: 1;
     margin-top: 20px;
+
 }
 
 .dashboard-title {
