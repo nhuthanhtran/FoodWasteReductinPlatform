@@ -1,6 +1,7 @@
 "use client"
 import { Navbar, Nav, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
+import LogoutButton from "./LogoutButton";
 
 function TopBar({ title }) {
     const navigate = useNavigate()
@@ -21,6 +22,7 @@ function TopBar({ title }) {
                 >
                     Request Items
                 </Button>
+                <LogoutButton />
             </Nav>
         </Navbar>
     )

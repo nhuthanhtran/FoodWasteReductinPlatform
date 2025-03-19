@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
-import firebaseConfig from "./config"; // Ensure config.js exports firebaseConfig properly
+import firebaseConfig from "./config"; 
 
 // Initialize Firebase App
 const app = initializeApp(firebaseConfig);
@@ -10,5 +11,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Export Firebase Services
+
+export { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword}
 export { auth, db, collection, addDoc, serverTimestamp };
