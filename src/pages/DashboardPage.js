@@ -15,10 +15,14 @@ function DashboardPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const q = query(collection(db, "donations_and_requests"));
+                const q = query(collection(db, "donations"));
                 const querySnapshot = await getDocs(q);
                 const items = querySnapshot.docs.map((doc) => ({
                     id: doc.id,
+                    type: "Donation",
+                    item: doc.data().foodtype,
+                    quantity: doc.data().quantity,
+                    action: "Take",
                     ...doc.data(),
                 }));
                 setData(items);
@@ -32,9 +36,16 @@ function DashboardPage() {
 
     const filteredData = data.filter(
         (item) =>
-            item.item.toLowerCase().includes(filter.toLowerCase()) ||
-            item.type.toLowerCase().includes(filter.toLowerCase())
+            item.item &&
+            typeof item.item === "string" &&
+            item.type &&
+            typeof item.type === "string" &&
+            filter &&
+            typeof filter === "string" &&
+            (item.item.toLowerCase().includes(filter.toLowerCase()) ||
+                item.type.toLowerCase().includes(filter.toLowerCase()))
     );
+
 
     const handleAction = (item) => {
         if (item.type === "Donation") {
