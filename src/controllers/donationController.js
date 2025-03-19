@@ -19,3 +19,20 @@ export const getUserDonations = async (userId) => {
         return { success: false, error: error.message };
     }
 };
+
+export const getAvailableDonations = async () => {
+    try {
+        const q = query(collection(db, "donations"), where("status", "==", "Pending"));
+        const querySnapshot = await getDocs(q);
+
+        let donations = [];
+        querySnapshot.forEach((doc) => {
+            donations.push({ id: doc.id, ...doc.data() });
+        });
+
+        return { success: true, donations };
+    } catch (error) {
+        console.error("Error fetching donations:", error);
+        return { success: false, error: error.message };
+    }
+};
