@@ -3,6 +3,8 @@
 import {useState} from "react"
 import {Container, Row, Col, Form, Button} from "react-bootstrap"
 import {useNavigate} from "react-router-dom"
+import { db, auth } from "../firebase/auth";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import LeftNavBar from "../components/LeftNavBar"
 import TopBar from "../components/TopBar"
 
@@ -19,6 +21,8 @@ function DonationFormPage() {
         recurringFrequency: "weekly",
     })
 
+    const [loading, setLoading] = useState(false);
+
     const handleInputChange = (e) => {
         const {name, value, type, checked} = e.target
         setFormData((prevState) => ({
@@ -27,10 +31,40 @@ function DonationFormPage() {
         }))
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log("Form submitted:", formData)
-        navigate("/dashboard")
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true)
+
+        try {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("You must be logged in to submit donation.")
+            }
+
+            //Save to Firestore
+
+            await addDoc(collection(db, "donations"), {
+                userId: user.uid,
+                foodType: formData.foodType,
+                quantity: formData.quantity,
+                expirationDate: formData.expirationDate,
+                location: formData.location,
+                pickupTime: formData.pickupTime,
+                customPickupTime: formData.customPickupTime || null,
+                isRecurring: formData.isRecurring,
+                recurringFrequency: formData.isRecurring ? formData.recurringFrequency : null,
+                status: "Pending", // Default status
+                createdAt: serverTimestamp(),
+            });
+
+            alert("Donation submitted successfully! Thank you for your kindness.")
+            navigate("/dashboard");
+        }catch(error){
+        console.error("There was an error submitting your donation. Please contact customer support.", error);
+        alert("Failed to submit donation")
+        }finally {
+            setLoading(false);
+        }
     }
 
     return (
