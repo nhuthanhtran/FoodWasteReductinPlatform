@@ -1,19 +1,27 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import {Container, Row, Col, Form, Button, Image} from "react-bootstrap"
-import { Link } from "react-router-dom"
-import SpinningLogo from "../components/SpinningLogo";
+import { useState } from "react";
+import { Container, Row, Col, Form, Button, Image, Alert } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { auth, signInWithEmailAndPassword } from "../firebase/auth";
 
 function LoginPage() {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        // Handle login logic here
-        console.log("Login submitted", { email, password })
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            navigate("/dashboard"); // Redirect user to dashboard after successful login
+        } catch (err) {
+            setError("Invalid email or password. Please try again.");
+        }
+    };
 
     return (
         <Container className="mt-5">
@@ -23,6 +31,8 @@ function LoginPage() {
                 </Col>
                 <Col md={6}>
                     <h2 className="text-center mb-4">Login to FoodShare</h2>
+                    {error && <Alert variant="danger">{error}</Alert>}
+
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
@@ -56,7 +66,7 @@ function LoginPage() {
                 </Col>
             </Row>
         </Container>
-    )
+    );
 }
 
-export default LoginPage
+export default LoginPage;
