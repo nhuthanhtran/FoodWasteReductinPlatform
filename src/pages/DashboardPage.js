@@ -1,61 +1,54 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { collection, getDocs, query } from "firebase/firestore";
-import { db } from "../firebase/auth";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Table, Button } from "react-bootstrap";
 import LeftNavBar from "../components/LeftNavBar";
 import TopBar from "../components/TopBar";
 import "../styles/Dashboard.css";
+import { auth } from "../firebase/auth"; // Import Firebase auth
+import { getUserDonations } from "../controllers/donationController"; // Import your controller
 
 function DashboardPage() {
-    const [data, setData] = useState([]);
-    const [filter, setFilter] = useState("");
+    const [donations, setDonations] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDonations = async () => {
+            setLoading(true);
             try {
-                const q = query(collection(db, "donations"));
-                const querySnapshot = await getDocs(q);
-                const items = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    type: "Donation",
-                    item: doc.data().foodtype,
-                    quantity: doc.data().quantity,
-                    action: "Take",
-                    ...doc.data(),
-                }));
-                setData(items);
-            } catch (error) {
-                console.error("Error fetching data: ", error);
+                // Get the current user's ID
+                const user = auth.currentUser;
+                if (!user) {
+                    throw new Error("User is not authenticated.");
+                }
+
+                // Fetch donations using the controller
+                const response = await getUserDonations(user.uid);
+
+                if (response.success) {
+                    setDonations(response.donations); // Update state with fetched donations
+                } else {
+                    setError(response.error); // Handle error from the controller
+                }
+            } catch (err) {
+                console.error("Error fetching donations:", err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
             }
         };
 
-        fetchData();
+        fetchDonations();
     }, []);
 
-    const filteredData = data.filter(
-        (item) =>
-            item.item &&
-            typeof item.item === "string" &&
-            item.type &&
-            typeof item.type === "string" &&
-            filter &&
-            typeof filter === "string" &&
-            (item.item.toLowerCase().includes(filter.toLowerCase()) ||
-                item.type.toLowerCase().includes(filter.toLowerCase()))
-    );
+    if (loading) {
+        return <div>Loading donations...</div>; // Show loading state
+    }
 
-
-    const handleAction = (item) => {
-        if (item.type === "Donation") {
-            console.log("Taking donation:", item);
-            // Add "Take" functionality here
-        } else {
-            console.log("Fulfilling request:", item);
-            // Add "Donate" functionality here
-        }
-    };
+    if (error) {
+        return <div>Error: {error}</div>; // Show error message
+    }
 
     return (
         <div className="dashboard-container">
@@ -65,39 +58,33 @@ function DashboardPage() {
             <div className="main-content">
                 <TopBar title="Dashboard" />
                 <div className="dashboard-content">
-                    <h2 className="dashboard-title">Available Donations and Help Requests</h2>
-                    <div className="filter-container">
-                        <input
-                            type="text"
-                            placeholder="Filter by item or type..."
-                            value={filter}
-                            onChange={(e) => setFilter(e.target.value)}
-                            className="filter-input"
-                        />
-                    </div>
+                    <h2 className="dashboard-title">Available Donations</h2>
                     <Table striped bordered hover className="dashboard-table">
                         <thead>
                         <tr>
-                            <th>Type</th>
-                            <th>Item</th>
+                            <th>Food Type</th>
                             <th>Quantity</th>
+                            <th>Expiration Date</th>
+                            <th>Location</th>
+                            <th>Pickup Time</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {filteredData.map((item) => (
-                            <tr key={item.id}>
-                                <td className={item.type === "Donation" ? "donation-type" : "request-type"}>{item.type}</td>
-                                <td>{item.item}</td>
-                                <td>{item.quantity}</td>
+                        {donations.map((donation) => (
+                            <tr key={donation.id}>
+                                <td>{donation.foodType}</td>
+                                <td>{donation.quantity}</td>
+                                <td>{donation.expirationDate}</td>
+                                <td>{donation.location}</td>
+                                <td>{donation.pickupTime}</td>
                                 <td>
                                     <Button
-                                        onClick={() => handleAction(item)}
-                                        variant={item.type === "Donation" ? "success" : "primary"}
+                                        variant="success"
                                         size="sm"
-                                        className="action-button"
+                                        onClick={() => console.log("Taking donation:", donation)}
                                     >
-                                        {item.type === "Donation" ? "Take" : "Donate"}
+                                        Take
                                     </Button>
                                 </td>
                             </tr>
@@ -111,6 +98,7 @@ function DashboardPage() {
 }
 
 export default DashboardPage;
+
 
 // function DashboardPage() {
 //     const mockData = [
