@@ -36,7 +36,6 @@ function DonationHistoryPage() {
                 <Col md={9} lg={10} className="px-md-4">
                     <TopBar title="Request Donation"/>
                     <h2 className="mt-4 mb-4">Your Donation History</h2>
-
                     {error && <Alert variant="danger">{error}</Alert>}
 
                     {donations.length === 0 ? (
