@@ -5,8 +5,10 @@ import { Container, Row, Col, Table, Button, Alert } from "react-bootstrap";
 import LeftNavBar from "../components/LeftNavBar";
 import TopBar from "../components/TopBar";
 import "../styles/Dashboard.css";
-import { getAvailableDonations } from "../controllers/donationController";
+import { getAvailableDonations, claimDonation } from "../controllers/donationController";
 import { getOpenRequests } from "../controllers/requestController";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase/auth";
 
 function DashboardPage() {
     const [donations, setDonations] = useState([]);
@@ -14,11 +16,33 @@ function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const navigate = useNavigate();
+
+    const handleClaimDonation = async (donationId) => {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("You must be logged in to claim a donation.");
+            return;
+        }
+
+        const result = await claimDonation(donationId, user.uid, user.displayName || "Anonymous");
+
+        if (result.success) {
+            setDonations(prev => prev.filter(d => d.id !== donationId));
+            alert("Donation claimed successfully!");
+        } else {
+            alert("Failed to claim donation: " + result.error);
+        }
+    };
+
+    const handleDonateItem = (request) => {
+        navigate("/make-donation", { state: request });
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                // Fetch available donations
                 const donationResult = await getAvailableDonations();
                 if (donationResult.success) {
                     setDonations(donationResult.donations);
@@ -26,7 +50,6 @@ function DashboardPage() {
                     setError(donationResult.error);
                 }
 
-                // Fetch open donation requests
                 const requestResult = await getOpenRequests();
                 if (requestResult.success) {
                     setRequests(requestResult.requests);
@@ -56,7 +79,6 @@ function DashboardPage() {
                 <TopBar title="Dashboard" />
 
                 <div className="dashboard-content">
-                    {/* Available Donations Table */}
                     <h2 className="dashboard-title">Available Donations</h2>
                     {donations.length === 0 ? (
                         <p>No donations available.</p>
@@ -81,7 +103,11 @@ function DashboardPage() {
                                     <td>{donation.location}</td>
                                     <td>{donation.pickupTime}</td>
                                     <td>
-                                        <Button variant="success" size="sm">
+                                        <Button
+                                            variant="success"
+                                            size="sm"
+                                            onClick={() => handleClaimDonation(donation.id)}
+                                        >
                                             Claim Donation
                                         </Button>
                                     </td>
@@ -91,7 +117,6 @@ function DashboardPage() {
                         </Table>
                     )}
 
-                    {/* Open Donation Requests Table */}
                     <h2 className="dashboard-title">Open Requests</h2>
                     {requests.length === 0 ? (
                         <p>No donation requests available.</p>
@@ -114,7 +139,11 @@ function DashboardPage() {
                                     <td>{request.urgency}</td>
                                     <td>{request.pickupLocation}</td>
                                     <td>
-                                        <Button variant="primary" size="sm">
+                                        <Button
+                                            variant="primary"
+                                            size="sm"
+                                            onClick={() => handleDonateItem(request)}
+                                        >
                                             Donate Item
                                         </Button>
                                     </td>
