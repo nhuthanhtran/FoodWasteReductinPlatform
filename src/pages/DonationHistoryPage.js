@@ -6,6 +6,7 @@ import { getUserDonations } from "../controllers/donationController";
 import LeftNavBar from "../components/LeftNavBar"
 import TopBar from "../components/TopBar"
 import { auth } from "../firebase/auth";
+import UnclaimedDonations from "../components/UnclaimedDonation";
 
 function DonationHistoryPage() {
     const user = auth.currentUser;
@@ -27,6 +28,10 @@ function DonationHistoryPage() {
         fetchDonations();
     }, [user]);
 
+    const handleDonationDeleted = (deletedDonationId) => {
+        setDonations(prev => prev.filter(d => d.id !== deletedDonationId));
+    };
+
     return (
         <Container fluid>
             <Row>
@@ -35,6 +40,11 @@ function DonationHistoryPage() {
                 </Col>
                 <Col md={9} lg={10} className="px-md-4">
                     <TopBar title="Request Donation"/>
+
+                    <h2 className="mt-4 mb-4">Active Donations</h2>
+                    {user && <UnclaimedDonations userId={user.uid}
+                                                 onDonationDeleted={handleDonationDeleted}/>}
+
                     <h2 className="mt-4 mb-4">Your Donation History</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
 
