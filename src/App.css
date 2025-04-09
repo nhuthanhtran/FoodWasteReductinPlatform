@@ -47,7 +47,7 @@ html, body {
   background: linear-gradient(135deg, #141414, #3b1a84); /* Theme Background */
   color: white;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 #root {
