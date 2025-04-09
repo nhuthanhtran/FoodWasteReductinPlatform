@@ -7,6 +7,9 @@ import LeftNavBar from "../components/LeftNavBar";
 import TopBar from "../components/TopBar";
 import { auth } from "../firebase/auth";
 import { getUserDonationHistory } from "../controllers/donationHistoryController";
+import UnclaimedDonations from "../components/UnclaimedDonation";
+import '../styles/ScrollStyles.css';
+
 
 function DonationHistoryPage() {
     const user = auth.currentUser;
@@ -34,6 +37,16 @@ function DonationHistoryPage() {
         fetchDonations().then(r => {});
     }, [user]);
 
+    const handleDonationDeleted = (deletedDonation) => {
+        setDonations(prev => prev.map((d) => (d.id === deletedDonation.id ? deletedDonation : d)));
+    };
+
+    const handleDonationUpdated = (updated) => {
+        setDonations(prev =>
+            prev.map(d => (d.id === updated.id ? updated : d))
+        );
+    };
+
     return (
         <Container fluid>
             <Row>
@@ -41,7 +54,14 @@ function DonationHistoryPage() {
                     <LeftNavBar />
                 </Col>
                 <Col md={9} lg={10} className="px-md-4">
-                    <TopBar title="Request Donation" />
+                <div className="scrollableContainer">
+                    <TopBar title="Request Donation"/>
+
+                    <h2 className="mt-4 mb-4">Active Donations</h2>
+                    {user && <UnclaimedDonations userId={user.uid}
+                                                 onDonationDeleted={handleDonationDeleted}
+                                                 onDonationUpdated={handleDonationUpdated}/>}
+
                     <h2 className="mt-4 mb-4">Your Donation History</h2>
 
                     <h4>Submitted Donations</h4>
@@ -70,6 +90,7 @@ function DonationHistoryPage() {
                         ))
                     )}
 
+
                     <h4 className="mt-4">Claimed Donations</h4>
                     {claimedDonations.length === 0 ? (
                         <p>No claimed donations found.</p>
@@ -95,10 +116,13 @@ function DonationHistoryPage() {
                     )}
 
                     {error && <Alert variant="danger">{error}</Alert>}
+
+                    </div>
                 </Col>
             </Row>
         </Container>
     );
 }
+
 
 export default DonationHistoryPage;

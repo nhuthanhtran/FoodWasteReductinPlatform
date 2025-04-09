@@ -1,0 +1,27 @@
+/* ScrollStyles.css */
+
+.scrollableContainer {
+    max-height: 100vh;
+    overflow-y: auto;
+    padding-right: 8px;
+  
+    /* Optional scrollbar customization for Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+  }
+  
+  /* Optional scrollbar customization for WebKit (Chrome, Edge, Safari) */
+  .scrollableContainer::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollableContainer::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+  }
+  
+  .scrollableContainer::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  

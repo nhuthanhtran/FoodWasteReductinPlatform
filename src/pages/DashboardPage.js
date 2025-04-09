@@ -9,6 +9,7 @@ import { getAvailableDonations, claimDonation } from "../controllers/donationCon
 import { getOpenRequests } from "../controllers/requestController";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/auth";
+import '../styles/ScrollStyles.css';
 
 function DashboardPage() {
     const [donations, setDonations] = useState([]);
@@ -71,7 +72,7 @@ function DashboardPage() {
     if (error) return <Alert variant="danger">{error}</Alert>;
 
     return (
-        <div className="dashboard-container">
+        <div className="scrollableContainer dashboard-container">
             <div className="sidebar">
                 <LeftNavBar />
             </div>

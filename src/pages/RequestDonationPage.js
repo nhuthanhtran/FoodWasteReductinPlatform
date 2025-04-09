@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { db, auth, collection, addDoc, serverTimestamp } from "../firebase/auth";// Import Firebase
 import LeftNavBar from "../components/LeftNavBar";
 import TopBar from "../components/TopBar";
+import '../styles/ScrollStyles.css';
 
 function RequestDonationPage() {
     const navigate = useNavigate();
@@ -65,6 +66,7 @@ function RequestDonationPage() {
     };
 
     return (
+        <div className="scrollableContainer">
         <Container fluid>
             <Row>
                 <Col md={3} lg={2} className="sidebar">
@@ -152,6 +154,7 @@ function RequestDonationPage() {
                 </Col>
             </Row>
         </Container>
+        </div>
     );
 }
 

@@ -46,7 +46,8 @@ html, body {
   font-family: 'Arial', sans-serif;
   background: linear-gradient(135deg, #141414, #3b1a84); /* Theme Background */
   color: white;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #root {
