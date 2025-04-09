@@ -1,15 +1,29 @@
-"use client"
+"use client";
 
-import {useState} from "react"
-import {Container, Row, Col, Form, Button} from "react-bootstrap"
-import {useNavigate} from "react-router-dom"
-import { db, auth } from "../firebase/auth";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import LeftNavBar from "../components/LeftNavBar"
-import TopBar from "../components/TopBar"
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { useNavigate, useLocation } from "react-router-dom";
+import {auth, db} from "../firebase/auth";
+import LeftNavBar from "../components/LeftNavBar";
+import TopBar from "../components/TopBar";
+import { createDonation } from "../controllers/donationController";
+import {doc, updateDoc} from "firebase/firestore";
+
 
 function DonationFormPage() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state) {
+            setFormData(prev => ({
+                ...prev,
+                foodType: location.state.itemName || "",
+                quantity: location.state.quantity?.toString() || "",
+                location: location.state.pickupLocation || "",
+            }));
+        }
+    }, [location]);
     const [formData, setFormData] = useState({
         foodType: "",
         quantity: "",
@@ -19,65 +33,67 @@ function DonationFormPage() {
         customPickupTime: "",
         isRecurring: false,
         recurringFrequency: "weekly",
-    })
+    });
 
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        if (location.state) {
+            setFormData(prev => ({
+                ...prev,
+                foodType: location.state.itemName || "",
+                quantity: location.state.quantity?.toString() || "",
+            }));
+        }
+    }, [location]);
+
     const handleInputChange = (e) => {
-        const {name, value, type, checked} = e.target
-        setFormData((prevState) => ({
+        const { name, value, type, checked } = e.target;
+        setFormData(prevState => ({
             ...prevState,
             [name]: type === "checkbox" ? checked : value,
-        }))
-    }
+        }));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true)
+        setLoading(true);
 
         try {
-            const user = auth.currentUser;
-            if (!user) {
-                alert("You must be logged in to submit donation.")
+            const requestId = location.state?.id || null; // ← pull from state if available
+            const result = await createDonation(formData);
+
+            if (result.success) {
+                if (requestId) {
+                    const requestRef = doc(db, "requests", requestId);
+                    await updateDoc(requestRef, {
+                        status: "Accepted", // or "Fulfilled" if you prefer
+                    });
+                }
+                alert("Donation submitted successfully!");
+                navigate("/dashboard");
+            } else {
+                alert("Error submitting donation: " + result.error);
             }
-
-            //Save to Firestore
-
-            await addDoc(collection(db, "donations"), {
-                userId: user.uid,
-                foodType: formData.foodType,
-                quantity: formData.quantity,
-                expirationDate: formData.expirationDate,
-                location: formData.location,
-                pickupTime: formData.pickupTime,
-                customPickupTime: formData.customPickupTime || null,
-                isRecurring: formData.isRecurring,
-                recurringFrequency: formData.isRecurring ? formData.recurringFrequency : null,
-                status: "Pending", // Default status
-                createdAt: serverTimestamp(),
-            });
-            alert("Donation submitted successfully! Thank you for your kindness.")
-            navigate("/donationconfirmation", {state: formData});
-        }catch(error){
-        console.error("There was an error submitting your donation. Please contact customer support.", error);
-        alert("Failed to submit donation")
-        }finally {
+        } catch (error) {
+            console.error("Submit error:", error);
+            alert("Submission failed.");
+        } finally {
             setLoading(false);
         }
-    }
+    };
 
     return (
         <Container fluid>
             <Row>
                 <Col md={3} lg={2} className="sidebar">
-                    <LeftNavBar/>
+                    <LeftNavBar />
                 </Col>
 
                 <Col md={9} lg={10} className="px-md-4">
-                    <TopBar title="Make a Donation"/>
+                    <TopBar title="Make a Donation" />
                     <h2>Donate Food</h2>
                     <Form onSubmit={handleSubmit}>
-                        {/* Form Row - Centered */}
                         <Row className="justify-content-center align-items-center vh-75">
                             <Col md={6}>
                                 <Form.Group className="mb-3">
@@ -126,8 +142,7 @@ function DonationFormPage() {
 
                                 <Form.Group className="mb-3">
                                     <Form.Label>Pickup Time</Form.Label>
-                                    <Form.Select name="pickupTime" value={formData.pickupTime}
-                                                 onChange={handleInputChange}>
+                                    <Form.Select name="pickupTime" value={formData.pickupTime} onChange={handleInputChange}>
                                         <option value="ready_now">Ready Now</option>
                                         <option value="schedule">Schedule Pickup</option>
                                     </Form.Select>
@@ -158,8 +173,7 @@ function DonationFormPage() {
                                 {formData.isRecurring && (
                                     <Form.Group className="mb-3">
                                         <Form.Label>Recurring Frequency</Form.Label>
-                                        <Form.Select name="recurringFrequency" value={formData.recurringFrequency}
-                                                     onChange={handleInputChange}>
+                                        <Form.Select name="recurringFrequency" value={formData.recurringFrequency} onChange={handleInputChange}>
                                             <option value="daily">Daily</option>
                                             <option value="weekly">Weekly</option>
                                             <option value="monthly">Monthly</option>
@@ -167,19 +181,16 @@ function DonationFormPage() {
                                     </Form.Group>
                                 )}
 
-                                <Button variant="primary" type="submit">
-                                    Submit Donation
+                                <Button variant="primary" type="submit" disabled={loading}>
+                                    {loading ? "Submitting..." : "Submit Donation"}
                                 </Button>
-
                             </Col>
-                        </Row> {/* ✅ Closing the Row properly */}
+                        </Row>
                     </Form>
-
                 </Col>
             </Row>
-
         </Container>
-    )
+    );
 }
 
 export default DonationFormPage;
