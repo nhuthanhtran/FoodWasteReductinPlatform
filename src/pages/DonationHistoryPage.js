@@ -62,7 +62,7 @@ function DonationHistoryPage() {
                                                  onDonationDeleted={handleDonationDeleted}
                                                  onDonationUpdated={handleDonationUpdated}/>}
 
-                    <h2 className="mt-4 mb-4">Your Donation History</h2>
+                    {/*<h2 className="mt-4 mb-4">Your Donation History</h2>*/}
 
                     <h4>Submitted Donations</h4>
                     {donations.length === 0 ? (
@@ -98,12 +98,14 @@ function DonationHistoryPage() {
                         claimedDonations.map((donation) => (
                             <Card key={donation.id} className="mb-3">
                                 <Card.Body>
-                                    <Card.Title>{donation.recipient}</Card.Title>
+                                    <Card.Title>Recipient Name: {donation.recipientName}</Card.Title>
                                     <Card.Subtitle className="mb-2 text-muted">
                                         Claimed on {new Date(donation.date.seconds * 1000).toLocaleDateString()}
                                     </Card.Subtitle>
                                     <Card.Text>
-                                        Donation ID: {donation.donationId}
+                                        Food: {donation.foodType}
+                                        <br />
+                                        Quantity: {donation.quantity}
                                         <br />
                                         Status:{" "}
                                         <span className={donation.status === "Delivered" ? "text-success" : "text-warning"}>
