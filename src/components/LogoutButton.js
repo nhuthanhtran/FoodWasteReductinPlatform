@@ -6,8 +6,14 @@ function LogoutButton() {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        await signOut(auth);
-        navigate("/login");
+        try {
+            await signOut(auth);
+            navigate("/dashboard");
+            alert("You have been logged out successfully.");
+        } catch (error) {
+            console.error("Error during logout:", error);
+            alert("Failed to log out. Please try again.");
+        }
     };
 
     return <Button variant="danger" onClick={handleLogout}>Logout</Button>;
