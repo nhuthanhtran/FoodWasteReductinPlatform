@@ -186,12 +186,24 @@ body:before {
 }
 
 .request-btn {
-  background: #007bff;
+  background: #3b1a84;
 }
 
 .request-btn:hover {
-  background: #0056b3;
+  background: #5a33ab;
   transform: scale(1.05);
+}
+
+.custom-logout-btn {
+  background-color: #c33232; /* lighter red */
+  border-color: #c33232;
+  margin-left: 16px;
+  color: white;
+}
+
+.custom-logout-btn:hover {
+  background-color: #e57373;
+  border-color: #e57373;
 }
 
 /* Spacing Between Buttons */
