@@ -2,6 +2,7 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { auth, signOut } from "../firebase/auth";
 
+
 function LogoutButton() {
     const navigate = useNavigate();
 
@@ -16,7 +17,7 @@ function LogoutButton() {
         }
     };
 
-    return <Button variant="danger" onClick={handleLogout}>Logout</Button>;
+    return <Button className="custom-logout-btn" onClick={handleLogout}>Logout</Button>;
 }
 
 export default LogoutButton;
