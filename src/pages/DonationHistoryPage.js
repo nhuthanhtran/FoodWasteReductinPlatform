@@ -7,6 +7,8 @@ import LeftNavBar from "../components/LeftNavBar"
 import TopBar from "../components/TopBar"
 import { auth } from "../firebase/auth";
 import UnclaimedDonations from "../components/UnclaimedDonation";
+import '../styles/ScrollStyles.css';
+
 
 function DonationHistoryPage() {
     const user = auth.currentUser;
@@ -39,6 +41,7 @@ function DonationHistoryPage() {
                     <LeftNavBar />
                 </Col>
                 <Col md={9} lg={10} className="px-md-4">
+                <div className="scrollableContainer">
                     <TopBar title="Request Donation"/>
 
                     <h2 className="mt-4 mb-4">Active Donations</h2>
@@ -72,10 +75,12 @@ function DonationHistoryPage() {
                             </Card>
                         ))
                     )}
+                    </div>
                 </Col>
             </Row>
         </Container>
     );
 }
+
 
 export default DonationHistoryPage;

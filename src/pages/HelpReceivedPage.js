@@ -8,6 +8,7 @@ import TopBar from "../components/TopBar"
 import { auth } from "../firebase/auth";
 import Badge from 'react-bootstrap/Badge';
 import { getUserRequest } from "../controllers/requestController";
+import '../styles/ScrollStyles.css';
 
 
 
@@ -50,6 +51,7 @@ function HelpReceivedPage() {
     }, [user]);
 
     return (
+        <div className="scrollableContainer">
         <Container fluid>
             <Row>
                 <Col md={3} lg={2} className="sidebar">
@@ -94,6 +96,7 @@ function HelpReceivedPage() {
                 </Col>
             </Row>
         </Container>
+        </div>
     );
 }
 
