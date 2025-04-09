@@ -30,8 +30,14 @@ function DonationHistoryPage() {
         fetchDonations();
     }, [user]);
 
-    const handleDonationDeleted = (deletedDonationId) => {
-        setDonations(prev => prev.filter(d => d.id !== deletedDonationId));
+    const handleDonationDeleted = (deletedDonation) => {
+        setDonations(prev => prev.map((d) => (d.id === deletedDonation.id ? deletedDonation : d)));
+    };
+
+    const handleDonationUpdated = (updated) => {
+        setDonations(prev =>
+            prev.map(d => (d.id === updated.id ? updated : d))
+        );
     };
 
     return (
@@ -46,7 +52,8 @@ function DonationHistoryPage() {
 
                     <h2 className="mt-4 mb-4">Active Donations</h2>
                     {user && <UnclaimedDonations userId={user.uid}
-                                                 onDonationDeleted={handleDonationDeleted}/>}
+                                                 onDonationDeleted={handleDonationDeleted}
+                                                 onDonationUpdated={handleDonationUpdated}/>}
 
                     <h2 className="mt-4 mb-4">Your Donation History</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
