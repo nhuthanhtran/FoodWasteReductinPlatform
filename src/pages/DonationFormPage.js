@@ -56,9 +56,8 @@ function DonationFormPage() {
                 status: "Pending", // Default status
                 createdAt: serverTimestamp(),
             });
-
             alert("Donation submitted successfully! Thank you for your kindness.")
-            navigate("/dashboard");
+            navigate("/donationconfirmation", {state: formData});
         }catch(error){
         console.error("There was an error submitting your donation. Please contact customer support.", error);
         alert("Failed to submit donation")

@@ -6,6 +6,13 @@ import TopBar from "../components/TopBar";
 function DonationConfirmPage() {
     const location = useLocation();
     const formData = location.state;
+    if (!formData) {
+        return (
+            <Container fluid className="confirmation-container">
+                <h4>Loading donation details...</h4>
+            </Container>
+        );
+    }
 
     return (
         <Container fluid className="confirmation-container">
@@ -28,8 +35,7 @@ function DonationConfirmPage() {
                                 <p><strong>Custom Pickup Time:</strong> {formData.customPickupTime}</p>
                             )}
                             <h5>Address Details</h5>
-                            <p>{formData.location.street}, {formData.location.city}
-                                , {formData.location.state} {formData.location.zip}</p>
+                            <p>{formData.location}</p>
                             {formData.isRecurring && (
                                 <div>
                                     <h5>Recurring Donation</h5>
