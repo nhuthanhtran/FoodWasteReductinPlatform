@@ -70,8 +70,8 @@ function DonationFormPage() {
                         status: "Accepted", // or "Fulfilled" if you prefer
                     });
                 }
-                alert("Donation submitted successfully!");
-                navigate("/dashboard");
+              //  alert("Donation submitted successfully!");
+                navigate("/donationconfirmation", {state: formData});
             } else {
                 alert("Error submitting donation: " + result.error);
             }
