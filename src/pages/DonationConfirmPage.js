@@ -1,11 +1,22 @@
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
 import LeftNavBar from "../components/LeftNavBar";
 import TopBar from "../components/TopBar";
 
 function DonationConfirmPage() {
+    const navigate = useNavigate();
     const location = useLocation();
     const formData = location.state;
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            navigate("/dashboard");
+        }, 5000); 
+        
+        return () => clearTimeout(timer);
+    }, [navigate]); 
+
     if (!formData) {
         return (
             <Container fluid className="confirmation-container">
