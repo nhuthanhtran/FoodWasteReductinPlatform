@@ -12,6 +12,7 @@ import { db } from "../firebase/auth";
 import { doc, updateDoc} from "firebase/firestore";
 import EditHelpRequestForm from "../components/EditHelpRequestForm";
 import ActiveHelpRequests from "../components/ActiveHelpRequest";
+import '../styles/ScrollStyles.css';
 
 
 function HelpReceivedCard({ help }) {
@@ -84,6 +85,7 @@ function HelpReceivedPage() {
     const historyRequests = requests.filter((r) => r.status !== "Pending");
 
     return (
+        <div className="scrollableContainer">
         <Container fluid>
             <Row>
                 <Col md={3} lg={2} className="sidebar">
@@ -159,6 +161,7 @@ function HelpReceivedPage() {
                 onSave={handleRequestUpdated}
             />
         </Container>
+        </div>
     );
 }
 
