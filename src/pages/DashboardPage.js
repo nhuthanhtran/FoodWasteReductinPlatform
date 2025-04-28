@@ -101,7 +101,11 @@ function DashboardPage() {
                                     <td>{donation.foodType}</td>
                                     <td>{donation.quantity}</td>
                                     <td>{donation.expirationDate}</td>
-                                    <td>{donation.location}</td>
+                                    <td>
+                                        {donation.location}
+                                        {/*{donation.location.street}<br/>*/}
+                                        {/*{donation.location.city}, {donation.location.state} {donation.location.zip}*/}
+                                    </td>
                                     <td>{donation.pickupTime}</td>
                                     <td>
                                         <Button

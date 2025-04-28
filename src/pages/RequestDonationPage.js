@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { db, auth, collection, addDoc, serverTimestamp } from "../firebase/auth";// Import Firebase
 import LeftNavBar from "../components/LeftNavBar";
 import TopBar from "../components/TopBar";
 import '../styles/ScrollStyles.css';
+import {AddressAutofill} from "@mapbox/search-js-react";
 
 function RequestDonationPage() {
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ function RequestDonationPage() {
         quantity: "",
         urgency: "medium",
         additionalDetails: "",
+        //pickupLocation: {street:"", city:"",state:"",zip:""},
         pickupLocation: "",
         contactNumber: "",
     });
@@ -125,13 +127,45 @@ function RequestDonationPage() {
 
                                 <Form.Group className="mb-3">
                                     <Form.Label>Pickup Location</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="pickupLocation"
-                                        value={formData.pickupLocation}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
+                                    <AddressAutofill accessToken="pk.eyJ1IjoibXJhaG1hbjEyIiwiYSI6ImNtYTAyMWoyNDF2eDAyanBzNno1eXFhc2UifQ.3kq8ESoBC2jg-u0LxoohZA"
+                                    >
+                                        <Form.Control
+                                            type="text"
+                                            name="pickupLocation"
+                                            value={formData.pickupLocation}
+                                            onChange={handleInputChange}
+                                            placeholder="Enter address"
+                                            required
+                                            autoComplete="address-line1"
+                                        />
+                                        {/*<Form.Control*/}
+                                        {/*    type="text"*/}
+                                        {/*    name="city"*/}
+                                        {/*    value={formData.pickupLocation.city}*/}
+                                        {/*    onChange={handleInputChange}*/}
+                                        {/*    placeholder="City"*/}
+                                        {/*    required*/}
+                                        {/*    autoComplete="address-level2"*/}
+                                        {/*/>*/}
+                                        {/*<Form.Control*/}
+                                        {/*    type="text"*/}
+                                        {/*    name="state"*/}
+                                        {/*    value={formData.pickupLocation.state}*/}
+                                        {/*    onChange={handleInputChange}*/}
+                                        {/*    placeholder="Enter address"*/}
+                                        {/*    required*/}
+                                        {/*    autoComplete="address-level1"*/}
+                                        {/*/>*/}
+                                        {/*<Form.Control*/}
+                                        {/*    type="text"*/}
+                                        {/*    name="zip"*/}
+                                        {/*    value={formData.pickupLocation.zip}*/}
+                                        {/*    onChange={handleInputChange}*/}
+                                        {/*    placeholder="Enter address"*/}
+                                        {/*    required*/}
+                                        {/*    autoComplete="postal-code"*/}
+                                        {/*/>*/}
+                                    </AddressAutofill>
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">

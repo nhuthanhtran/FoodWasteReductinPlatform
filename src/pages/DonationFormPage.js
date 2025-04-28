@@ -8,6 +8,7 @@ import LeftNavBar from "../components/LeftNavBar";
 import TopBar from "../components/TopBar";
 import { createDonation } from "../controllers/donationController";
 import {doc, updateDoc} from "firebase/firestore";
+import { AddressAutofill } from "@mapbox/search-js-react";
 
 
 function DonationFormPage() {
@@ -28,6 +29,7 @@ function DonationFormPage() {
         foodType: "",
         quantity: "",
         expirationDate: "",
+        //location: {street:"", city:"",state:"",zip:""},
         location: "",
         pickupTime: "ready_now",
         customPickupTime: "",
@@ -37,15 +39,15 @@ function DonationFormPage() {
 
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (location.state) {
-            setFormData(prev => ({
-                ...prev,
-                foodType: location.state.itemName || "",
-                quantity: location.state.quantity?.toString() || "",
-            }));
-        }
-    }, [location]);
+    // useEffect(() => {
+    //     if (location.state) {
+    //         setFormData(prev => ({
+    //             ...prev,
+    //             foodType: location.state.itemName || "",
+    //             quantity: location.state.quantity?.toString() || "",
+    //         }));
+    //     }
+    // }, [location]);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -131,13 +133,45 @@ function DonationFormPage() {
 
                                 <Form.Group className="mb-3">
                                     <Form.Label>Location</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="location"
-                                        value={formData.location}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
+                                    <AddressAutofill accessToken="pk.eyJ1IjoibXJhaG1hbjEyIiwiYSI6ImNtYTAyMWoyNDF2eDAyanBzNno1eXFhc2UifQ.3kq8ESoBC2jg-u0LxoohZA"
+                                    >
+                                        <Form.Control
+                                            type="text"
+                                            name="location"
+                                            value={formData.location}
+                                            onChange={handleInputChange}
+                                            placeholder="Enter address"
+                                            required
+                                            autoComplete="address-line1"
+                                        />
+                                        {/*<Form.Control*/}
+                                        {/*    type="text"*/}
+                                        {/*    name="city"*/}
+                                        {/*    value={formData.location.city}*/}
+                                        {/*    onChange={handleInputChange}*/}
+                                        {/*    placeholder="City"*/}
+                                        {/*    required*/}
+                                        {/*    autoComplete="address-level2"*/}
+                                        {/*/>*/}
+                                        {/*<Form.Control*/}
+                                        {/*    type="text"*/}
+                                        {/*    name="state"*/}
+                                        {/*    value={formData.location.state}*/}
+                                        {/*    onChange={handleInputChange}*/}
+                                        {/*    placeholder="Enter address"*/}
+                                        {/*    required*/}
+                                        {/*    autoComplete="address-level1"*/}
+                                        {/*/>*/}
+                                        {/*<Form.Control*/}
+                                        {/*    type="text"*/}
+                                        {/*    name="zip"*/}
+                                        {/*    value={formData.location.zip}*/}
+                                        {/*    onChange={handleInputChange}*/}
+                                        {/*    placeholder="Enter address"*/}
+                                        {/*    required*/}
+                                        {/*    autoComplete="postal-code"*/}
+                                        {/*/>*/}
+                                    </AddressAutofill>
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
