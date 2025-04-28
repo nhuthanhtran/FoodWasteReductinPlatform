@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Alert } from "react-bootstrap";
 import { getUserDonations } from "../controllers/donationController";
 import LeftNavBar from "../components/LeftNavBar";
@@ -78,7 +78,9 @@ function DonationHistoryPage() {
                                     <Card.Text>
                                         Quantity: {donation.quantity}
                                         <br />
-                                        Location: {donation.location}
+                                        {donation.location}
+                                        {/*Location: {donation.location.street}<br/>*/}
+                                        {/*{donation.location.city}, {donation.location.state} {donation.location.zip}*/}
                                         <br />
                                         Status:{" "}
                                         <span className={donation.status === "Delivered" ? "text-success" : "text-warning"}>
