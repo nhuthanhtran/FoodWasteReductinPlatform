@@ -9,10 +9,17 @@ import { getAvailableDonations, claimDonation } from "../controllers/donationCon
 import { getOpenRequests } from "../controllers/requestController";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/auth";
+import DonationMap from "../components/DonationMap";
+import mapboxgl from "mapbox-gl";
+
 import '../styles/ScrollStyles.css';
+import '../styles/Map.css';
+
+mapboxgl.accessToken = "pk.eyJ1IjoibXJhaG1hbjEyIiwiYSI6ImNtYTAyMWoyNDF2eDAyanBzNno1eXFhc2UifQ.3kq8ESoBC2jg-u0LxoohZA";
 
 function DashboardPage() {
     const [donations, setDonations] = useState([]);
+    const [donationLocations, setDonationLocations] = useState([]);
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -40,6 +47,29 @@ function DashboardPage() {
         navigate("/make-donation", { state: request });
     };
 
+    const convertAddressToCoords = async (locationString) => {
+        if (!locationString) return null;
+        try {
+            const response = await fetch(
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(locationString)}.json?access_token=${mapboxgl.accessToken}&autocomplete=false&limit=5`
+            );
+
+            if (!response.ok) throw new Error("Failed to fetch coordinates");
+
+            const data = await response.json();
+            if (data.features.length > 0) {
+                const [longitude, latitude] = data.features[0].center;
+                return {
+                    longitude: parseFloat(longitude.toFixed(6)),
+                    latitude: parseFloat(latitude.toFixed(6)),
+                };
+            }
+        } catch (err) {
+            console.error("Geocoding error for location:", locationString, err);
+        }
+        return null;
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -47,6 +77,18 @@ function DashboardPage() {
                 const donationResult = await getAvailableDonations();
                 if (donationResult.success) {
                     setDonations(donationResult.donations);
+
+                    const locations = await Promise.all(
+                        donationResult.donations.map(async (donation) => {
+                            if (donation.location) {
+                                const coords = await convertAddressToCoords(donation.location);
+                                return coords ? { address: donation.location, foodType: donation.foodType, quantity: donation.quantity, ...coords } : null;
+                            }
+                            return null;
+                        })
+                    );
+
+                    setDonationLocations(locations.filter(loc => loc));
                 } else {
                     setError(donationResult.error);
                 }
@@ -80,6 +122,9 @@ function DashboardPage() {
                 <TopBar title="Dashboard" />
 
                 <div className="dashboard-content">
+                    <h2 className="dashboard-title">Donation Locations</h2>
+                    <DonationMap donationLocations={donationLocations} handleClaimDonation={handleClaimDonation}/> {}
+
                     <h2 className="dashboard-title">Available Donations</h2>
                     {donations.length === 0 ? (
                         <p>No donations available.</p>
@@ -101,11 +146,7 @@ function DashboardPage() {
                                     <td>{donation.foodType}</td>
                                     <td>{donation.quantity}</td>
                                     <td>{donation.expirationDate}</td>
-                                    <td>
-                                        {donation.location}
-                                        {/*{donation.location.street}<br/>*/}
-                                        {/*{donation.location.city}, {donation.location.state} {donation.location.zip}*/}
-                                    </td>
+                                    <td>{donation.location}</td>
                                     <td>{donation.pickupTime}</td>
                                     <td>
                                         <Button
