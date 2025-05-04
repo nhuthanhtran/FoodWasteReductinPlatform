@@ -69,7 +69,7 @@ const DonationMap = ({ donationLocations, handleClaimDonation }) => {
                 map.current = null;
             }
         };
-    }, [donationLocations]);
+    }, [donationLocations, handleClaimDonation]);
 
     return <div ref={mapContainer} className="map-container" />;
 };
