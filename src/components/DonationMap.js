@@ -2,8 +2,7 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-mapboxgl.accessToken = "pk.eyJ1IjoibXJhaG1hbjEyIiwiYSI6ImNtYTAyMWoyNDF2eDAyanBzNno1eXFhc2UifQ.3kq8ESoBC2jg-u0LxoohZA";
-
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 const DonationMap = ({ donationLocations, handleClaimDonation }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
