@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/auth";
 import DonationMap from "../components/DonationMap";
 import mapboxgl from "mapbox-gl";
+import SearchBar from "../components/SearchBar";
 
 import '../styles/ScrollStyles.css';
 import '../styles/Map.css';
@@ -23,6 +24,22 @@ function DashboardPage() {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [requestSearchTerm, setRequestSearchTerm] = useState("");
+
+    const filteredDonations = donations.filter((donation) =>
+        [donation.foodType, donation.location]
+            .join(" ")
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+    );
+
+    const filteredRequests = requests.filter((request) =>
+        [request.itemName, request.pickupLocation]
+            .join(" ")
+            .toLowerCase()
+            .includes(requestSearchTerm.toLowerCase())
+    );
 
     const navigate = useNavigate();
 
@@ -126,8 +143,16 @@ function DashboardPage() {
                     <DonationMap donationLocations={donationLocations} handleClaimDonation={handleClaimDonation}/> {}
 
                     <h2 className="dashboard-title">Available Donations</h2>
+                    <SearchBar
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        placeholder="Search by item or location..."
+                    />
+
                     {donations.length === 0 ? (
                         <p>No donations available.</p>
+                    ) : filteredDonations.length === 0 ? (
+                        <p>No matching donations found.</p>
                     ) : (
                         <Table striped bordered hover className="dashboard-table">
                             <thead>
@@ -141,13 +166,20 @@ function DashboardPage() {
                             </tr>
                             </thead>
                             <tbody>
-                            {donations.map((donation) => (
-                                <tr key={donation.id}>
-                                    <td>{donation.foodType}</td>
-                                    <td>{donation.quantity}</td>
-                                    <td>{donation.expirationDate}</td>
-                                    <td>{donation.location}</td>
-                                    <td>{donation.pickupTime}</td>
+                            {donations
+                                .filter((donation) =>
+                                    [donation.foodType, donation.location]
+                                        .join(" ")
+                                        .toLowerCase()
+                                        .includes(searchTerm.toLowerCase())
+                                )
+                                .map((donation) => (
+                                    <tr key={donation.id}>
+                                        <td>{donation.foodType}</td>
+                                        <td>{donation.quantity}</td>
+                                        <td>{donation.expirationDate}</td>
+                                        <td>{donation.location}</td>
+                                        <td>{donation.pickupTime}</td>
                                     <td>
                                         <Button
                                             variant="success"
@@ -164,9 +196,16 @@ function DashboardPage() {
                     )}
 
                     <h2 className="dashboard-title">Open Requests</h2>
+                    <SearchBar
+                        searchTerm={requestSearchTerm}
+                        setSearchTerm={setRequestSearchTerm}
+                        placeholder="Search requests by item or location..."
+                    />
                     {requests.length === 0 ? (
                         <p>No donation requests available.</p>
-                    ) : (
+                    ) : filteredRequests.length === 0 ? (
+                                <p>No matching requests found.</p>
+                            ) : (
                         <Table striped bordered hover className="dashboard-table">
                             <thead>
                             <tr>
@@ -178,7 +217,14 @@ function DashboardPage() {
                             </tr>
                             </thead>
                             <tbody>
-                            {requests.map((request) => (
+                            {requests
+                                .filter((request) =>
+                                    [request.itemName, request.pickupLocation]
+                                        .join(" ")
+                                        .toLowerCase()
+                                        .includes(requestSearchTerm.toLowerCase())
+                                )
+                                .map((request) => (
                                 <tr key={request.id}>
                                     <td>{request.itemName}</td>
                                     <td>{request.quantity}</td>
