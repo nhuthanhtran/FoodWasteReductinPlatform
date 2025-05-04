@@ -37,6 +37,7 @@ function DashboardPage() {
 
         if (result.success) {
             setDonations(prev => prev.filter(d => d.id !== donationId));
+            setDonationLocations((prev) => prev.filter(location => location.id !== donationId));
             alert("Donation claimed successfully!");
         } else {
             alert("Failed to claim donation: " + result.error);
@@ -82,7 +83,7 @@ function DashboardPage() {
                         donationResult.donations.map(async (donation) => {
                             if (donation.location) {
                                 const coords = await convertAddressToCoords(donation.location);
-                                return coords ? { address: donation.location, foodType: donation.foodType, quantity: donation.quantity, ...coords } : null;
+                                return coords ? { id: donation.id, address: donation.location, foodType: donation.foodType, quantity: donation.quantity, ...coords } : null;
                             }
                             return null;
                         })
