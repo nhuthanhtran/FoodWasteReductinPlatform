@@ -27,22 +27,25 @@ function DashboardPage() {
     const navigate = useNavigate();
 
     const handleClaimDonation = async (donationId) => {
-        const user = auth.currentUser;
+        const user = auth.currentUser
         if (!user) {
-            alert("You must be logged in to claim a donation.");
-            return;
+            alert("You must be logged in to claim a donation.")
+            return
         }
-
-        const result = await claimDonation(donationId, user.uid, user.displayName || "Anonymous");
-
+    
+        const confirmed = window.confirm("Are you sure you want to claim this donation?")
+        if (!confirmed) return
+    
+        const result = await claimDonation(donationId, user.uid, user.displayName || "Anonymous")
+    
         if (result.success) {
-            setDonations(prev => prev.filter(d => d.id !== donationId));
-            setDonationLocations((prev) => prev.filter(location => location.id !== donationId));
-            alert("Donation claimed successfully!");
+            setDonations(prev => prev.filter(d => d.id !== donationId))
+            setDonationLocations((prev) => prev.filter(location => location.id !== donationId))
+            alert("Donation claimed successfully!")
         } else {
-            alert("Failed to claim donation: " + result.error);
+            alert("Failed to claim donation: " + result.error)
         }
-    };
+    }
 
     const handleDonateItem = (request) => {
         navigate("/make-donation", { state: request });
@@ -124,8 +127,9 @@ function DashboardPage() {
 
                 <div className="dashboard-content">
                     <h2 className="dashboard-title">Donation Locations</h2>
+                    <div className="map-wrapper">
                     <DonationMap donationLocations={donationLocations} handleClaimDonation={handleClaimDonation}/> {}
-
+                    </div>
                     <h2 className="dashboard-title">Available Donations</h2>
                     {donations.length === 0 ? (
                         <p>No donations available.</p>

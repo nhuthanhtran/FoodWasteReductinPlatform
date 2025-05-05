@@ -67,3 +67,28 @@
 .action-button:hover {
     transform: scale(1.05);
 }
+
+.map-wrapper {
+    border: 4px solid #bd99eb;
+    border-radius: 15px;
+    overflow: hidden;
+    height: 500px;
+    margin-bottom: 30px;
+    background-color: #f8f9fa;
+    padding: 0;
+  }
+  
+  .map-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  
+  .mapboxgl-canvas {
+    border-radius: 15px !important;
+    display: block;
+  }
