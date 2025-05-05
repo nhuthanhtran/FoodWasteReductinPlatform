@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10707377-1046-425b-b4b3-cb64815ff284" name="Changes" comment="Address Autofill. added">
+    <list default="true" id="10707377-1046-425b-b4b3-cb64815ff284" name="Changes" comment="Search bar added to dashboard with functionality, moved map to a more visually appealing location, attempted to fix formatting of top bar, but haven't gotten it to work yet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/AccountSettingsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AccountSettingsPage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/DashboardPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/DashboardPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/DonationFormPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/DonationFormPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/DonationHistoryPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/DonationHistoryPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/RequestDonationPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/RequestDonationPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/Dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/Dashboard.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +31,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/nhuthanhtran/FoodWasteReductinPlatform.git",
-    "accountId": "7ef3d8bb-a03e-4746-a5b3-fbff19f5653f"
+    "accountId": "a041bf1e-d5d1-40a5-8e05-7718dbfb7f53"
   }
 }]]></component>
   <component name="ProjectColorInfo">{
@@ -52,8 +47,9 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "AshR",
+    "git-widget-placeholder": "MakitaNew",
     "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -61,14 +57,15 @@
     "nodejs_package_manager_path": "npm",
     "npm.start.executor": "Run",
     "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.3.1.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2022.3.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-WS-243.23654.157" />
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.387" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.387" />
       </set>
     </attachedChunks>
   </component>
@@ -83,6 +80,7 @@
       <workItem from="1744146458623" duration="911000" />
       <workItem from="1744151291899" duration="782000" />
       <workItem from="1745792588178" duration="14198000" />
+      <workItem from="1746376137692" duration="2642000" />
     </task>
     <servers />
   </component>
@@ -91,7 +89,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Address Autofill. added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Address Autofill. added" />
+    <MESSAGE value="Search bar added to dashboard with functionality, moved map to a more visually appealing location, attempted to fix formatting of top bar, but haven't gotten it to work yet" />
+    <option name="LAST_COMMIT_MESSAGE" value="Search bar added to dashboard with functionality, moved map to a more visually appealing location, attempted to fix formatting of top bar, but haven't gotten it to work yet" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

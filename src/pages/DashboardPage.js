@@ -23,9 +23,9 @@ function DashboardPage() {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
-
+    const [inputValue, setInputValue] = useState("");
     const handleClaimDonation = async (donationId) => {
         const user = auth.currentUser;
         if (!user) {
@@ -46,6 +46,10 @@ function DashboardPage() {
     const handleDonateItem = (request) => {
         navigate("/make-donation", { state: request });
     };
+
+    const filteredDonations = donations.filter((donation) =>
+        donation.foodType.toLowerCase().includes(searchTerm)
+    );
 
     const convertAddressToCoords = async (locationString) => {
         if (!locationString) return null;
@@ -105,8 +109,8 @@ function DashboardPage() {
             } finally {
                 setLoading(false);
             }
-        };
 
+        };
         fetchData();
     }, []);
 
@@ -122,11 +126,22 @@ function DashboardPage() {
                 <TopBar title="Dashboard" />
 
                 <div className="dashboard-content">
-                    <h2 className="dashboard-title">Donation Locations</h2>
-                    <DonationMap donationLocations={donationLocations} handleClaimDonation={handleClaimDonation}/> {}
+
+                    <input
+                        type="text"
+                        placeholder="What are you looking for?"
+                        className="form-control mb-3"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                setSearchTerm(inputValue.toLowerCase());
+                            }
+                        }}
+                    />
 
                     <h2 className="dashboard-title">Available Donations</h2>
-                    {donations.length === 0 ? (
+                    {filteredDonations.length === 0 ? (
                         <p>No donations available.</p>
                     ) : (
                         <Table striped bordered hover className="dashboard-table">
@@ -141,7 +156,7 @@ function DashboardPage() {
                             </tr>
                             </thead>
                             <tbody>
-                            {donations.map((donation) => (
+                            {filteredDonations.map((donation) => (
                                 <tr key={donation.id}>
                                     <td>{donation.foodType}</td>
                                     <td>{donation.quantity}</td>
@@ -198,6 +213,8 @@ function DashboardPage() {
                             </tbody>
                         </Table>
                     )}
+                    <h2 className="dashboard-title">Donation Locations</h2>
+                    <DonationMap donationLocations={donationLocations} handleClaimDonation={handleClaimDonation}/> {}
                 </div>
             </div>
         </div>
