@@ -56,7 +56,11 @@ const DonationMap = ({ donationLocations, handleClaimDonation }) => {
                             const claimButton = document.getElementById(`claim-${location.id}`);
                             if (claimButton) {
                                 claimButton.addEventListener("click", () => {
-                                    alert(`Claiming donation: ${location.foodType}, Quantity: ${location.quantity}`);
+                                    const confirmed = window.confirm(
+                                        `Are you sure you want to claim: ${location.foodType} (Qty: ${location.quantity})?`
+                                    );
+                                    if (!confirmed) return;
+                                
                                     handleClaimDonation(location.id);
                                 });
                             }

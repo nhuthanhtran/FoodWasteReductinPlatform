@@ -93,6 +93,11 @@ function DashboardPage() {
     }
 
     const handleDonateItem = (request) => {
+        const confirmed = window.confirm(
+            `Are you sure you want to donate: ${request.itemName} (Qty: ${request.quantity})?`
+        );
+        if (!confirmed) return;
+    
         navigate("/make-donation", { state: request });
     };
 

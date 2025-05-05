@@ -15,6 +15,8 @@ import RequestDonationPage from "./pages/RequestDonationPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import DonationConfirmPage from "./pages/DonationConfirmPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(true) //set true for demo
@@ -31,6 +33,7 @@ function App() {
                     <Route path="/donationconfirmation" element={<DonationConfirmPage />} />
                     <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
                     <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/dashboard" element={isAuthenticated ? <DashboardPage /> : <Navigate to="/login" />} />
                     <Route
                         path="/donation-history"
