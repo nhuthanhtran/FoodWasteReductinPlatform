@@ -4,6 +4,10 @@ import { useState } from "react"
 import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap"
 import LeftNavBar from "../components/LeftNavBar"
 import TopBar from "../components/TopBar"
+import { getUserSettings, saveUserSettings } from "../controllers/userController"
+import { getAuth } from "firebase/auth"
+import { useEffect } from "react"
+
 
 const scrollableContentStyle = {
     height: "calc(100vh - 56px)", // Adjust this value based on your TopBar height
@@ -29,6 +33,23 @@ function AccountSettingsPage() {
     const [settings, setSettings] = useState(initialSettings)
     const [showAlert, setShowAlert] = useState(false)
 
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const auth = getAuth()
+            const user = auth.currentUser
+            if (!user) return
+    
+            const result = await getUserSettings(user.uid)
+            if (result.success) {
+                setSettings(result.data)
+            }
+        }
+    
+        fetchSettings()
+    }, [])
+    
+    
+
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target
         setSettings((prevSettings) => ({
@@ -37,13 +58,21 @@ function AccountSettingsPage() {
         }))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // Here you would typically send the updated settings to your backend
-        console.log("Updated settings:", settings)
-        setShowAlert(true)
-        setTimeout(() => setShowAlert(false), 3000)
+        const auth = getAuth()
+        const user = auth.currentUser
+        if (!user) return
+    
+        const result = await saveUserSettings(user.uid, settings)
+        if (result.success) {
+            setShowAlert(true)
+            setTimeout(() => setShowAlert(false), 3000)
+        } else {
+            console.error("Error saving settings:", result.error)
+        }
     }
+    
 
     return (
         <Container fluid className="vh-100">
@@ -64,30 +93,25 @@ function AccountSettingsPage() {
                             <Card className="mb-4">
                                 <Card.Header>Personal Information</Card.Header>
                                 <Card.Body>
-                                    <Row>
-                                        <Col md={6}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>First Name</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    name="firstName"
-                                                    value={settings.firstName}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col md={6}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Last Name</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    name="lastName"
-                                                    value={settings.lastName}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
+                                <Form.Group className="mb-3">
+                                <Form.Label>First Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="firstName"
+                                    value={settings.firstName}
+                                    onChange={handleInputChange}
+                                />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Last Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="lastName"
+                                    value={settings.lastName}
+                                    onChange={handleInputChange}
+                                />
+                            </Form.Group>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Email</Form.Label>
                                         <Form.Control type="email" name="email" value={settings.email} onChange={handleInputChange} />

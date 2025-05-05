@@ -21,7 +21,12 @@ const DonationMap = ({ donationLocations, handleClaimDonation }) => {
             center: defaultCenter,
             zoom: donationLocations.length > 0 ? 12 : 10,
             projection: "globe",
+            attributionControl: false
         });
+
+        map.current.addControl(new mapboxgl.AttributionControl({
+            compact: true
+        }), 'top-left');
 
         map.current.on("load", () => {
             map.current.resize();
@@ -71,7 +76,8 @@ const DonationMap = ({ donationLocations, handleClaimDonation }) => {
         };
     }, [donationLocations, handleClaimDonation]);
 
-    return <div ref={mapContainer} className="map-container" />;
+    return <div ref={mapContainer} className="map-container"
+    style={{ width: "100%", height: "100%" }} />;
 };
 
 
