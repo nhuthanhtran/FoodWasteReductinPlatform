@@ -18,8 +18,7 @@ import FilterDropdown from "../components/FilterDropdown";
 import '../styles/ScrollStyles.css';
 import '../styles/Map.css';
 
-mapboxgl.accessToken = "pk.eyJ1IjoibXJhaG1hbjEyIiwiYSI6ImNtYTAyMWoyNDF2eDAyanBzNno1eXFhc2UifQ.3kq8ESoBC2jg-u0LxoohZA";
-
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 function DashboardPage() {
     const [donations, setDonations] = useState([]);
     const [donationLocations, setDonationLocations] = useState([]);
