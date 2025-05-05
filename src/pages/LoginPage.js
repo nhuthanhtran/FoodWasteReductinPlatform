@@ -59,6 +59,9 @@ function LoginPage() {
                         <Button variant="primary" type="submit" className="w-100">
                             Login
                         </Button>
+                        <div className="text-center mt-2">
+                         <Link to="/forgot-password">Forgot your password?</Link>
+                        </div>
                     </Form>
                     <div className="text-center mt-3">
                         <Link to="/register">Don't have an account? Register here</Link>
