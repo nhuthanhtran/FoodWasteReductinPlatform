@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/auth";
 import DonationMap from "../components/DonationMap";
 import mapboxgl from "mapbox-gl";
+import SearchBar from "../components/SearchBar";
+import SortDropdown from "../components/SortDropdown";
+import FilterDropdown from "../components/FilterDropdown";
 
 import '../styles/ScrollStyles.css';
 import '../styles/Map.css';
@@ -23,6 +26,49 @@ function DashboardPage() {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [requestSearchTerm, setRequestSearchTerm] = useState("");
+
+    const [sortOption, setSortOption] = useState("");
+    const [selectedFoodTypes, setSelectedFoodTypes] = useState([]);
+
+    let filteredDonations = donations.filter((donation) =>
+        [donation.foodType, donation.location]
+            .join(" ")
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+    );
+
+    if (selectedFoodTypes.length > 0) {
+        filteredDonations = filteredDonations.filter((donation) =>
+            selectedFoodTypes.includes(donation.foodType)
+        );
+    }
+
+    if (sortOption === "expirationAsc") {
+        filteredDonations.sort(
+            (a, b) => new Date(a.expirationDate) - new Date(b.expirationDate)
+        );
+    } else if (sortOption === "expirationDesc") {
+        filteredDonations.sort(
+            (a, b) => new Date(b.expirationDate) - new Date(a.expirationDate)
+        );
+    }
+
+    const [selectedUrgencies, setSelectedUrgencies] = useState([]);
+
+    let filteredRequests = requests.filter((request) =>
+        [request.itemName, request.pickupLocation]
+            .join(" ")
+            .toLowerCase()
+            .includes(requestSearchTerm.toLowerCase())
+    );
+
+    if (selectedUrgencies.length > 0) {
+        filteredRequests = filteredRequests.filter((r) =>
+            selectedUrgencies.includes(r.urgency?.toLowerCase())
+        );
+    }
 
     const navigate = useNavigate();
 
@@ -131,8 +177,37 @@ function DashboardPage() {
                     <DonationMap donationLocations={donationLocations} handleClaimDonation={handleClaimDonation}/> {}
                     </div>
                     <h2 className="dashboard-title">Available Donations</h2>
+                    <div className="d-flex gap-3 flex-wrap mb-3">
+                        <div style={{flex: 4, minWidth: "220px"}}>
+                            <SearchBar
+                                searchTerm={searchTerm}
+                                setSearchTerm={setSearchTerm}
+                                placeholder="Search by item or location..."
+                            />
+                        </div>
+                        <div style={{flex: 1, minWidth: "200px"}}>
+                            <SortDropdown
+                                sortOption={sortOption}
+                                setSortOption={setSortOption}
+                                options={[
+                                    {value: "expirationAsc", label: "Soonest"},
+                                    {value: "expirationDesc", label: "Latest"}
+                                ]}
+                            />
+                        </div>
+                        <div style={{flex: 1, minWidth: "200px"}}>
+                            <FilterDropdown
+                                label="Food Type"
+                                options={[...new Set(donations.map((d) => d.foodType))]}
+                                selected={selectedFoodTypes}
+                                setSelected={setSelectedFoodTypes}
+                            />
+                        </div>
+                    </div>
                     {donations.length === 0 ? (
                         <p>No donations available.</p>
+                    ) : filteredDonations.length === 0 ? (
+                        <p>No matching donations found.</p>
                     ) : (
                         <Table striped bordered hover className="dashboard-table">
                             <thead>
@@ -146,31 +221,57 @@ function DashboardPage() {
                             </tr>
                             </thead>
                             <tbody>
-                            {donations.map((donation) => (
-                                <tr key={donation.id}>
-                                    <td>{donation.foodType}</td>
-                                    <td>{donation.quantity}</td>
-                                    <td>{donation.expirationDate}</td>
-                                    <td>{donation.location}</td>
-                                    <td>{donation.pickupTime}</td>
-                                    <td>
-                                        <Button
-                                            variant="success"
-                                            size="sm"
-                                            onClick={() => handleClaimDonation(donation.id)}
-                                        >
-                                            Claim Donation
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {donations
+                                .filter((donation) =>
+                                    [donation.foodType, donation.location]
+                                        .join(" ")
+                                        .toLowerCase()
+                                        .includes(searchTerm.toLowerCase())
+                                )
+                                .map((donation) => (
+                                    <tr key={donation.id}>
+                                        <td>{donation.foodType}</td>
+                                        <td>{donation.quantity}</td>
+                                        <td>{donation.expirationDate}</td>
+                                        <td>{donation.location}</td>
+                                        <td>{donation.pickupTime}</td>
+                                        <td>
+                                            <Button
+                                                variant="success"
+                                                size="sm"
+                                                onClick={() => handleClaimDonation(donation.id)}
+                                            >
+                                                Claim Donation
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </Table>
                     )}
 
                     <h2 className="dashboard-title">Open Requests</h2>
+                    <div className="d-flex flex-wrap gap-2 mb-3">
+                        <div style={{flex: 5, minWidth: "220px"}}>
+                            <SearchBar
+                                searchTerm={requestSearchTerm}
+                                setSearchTerm={setRequestSearchTerm}
+                                placeholder="Search requests by item or location..."
+                            />
+                        </div>
+                        <div style={{flex: 1, minWidth: "200px"}}>
+                            <FilterDropdown
+                                label="Urgency"
+                                options={["low", "medium", "high"]}
+                                selected={selectedUrgencies}
+                                setSelected={setSelectedUrgencies}
+                            />
+                        </div>
+                    </div>
                     {requests.length === 0 ? (
                         <p>No donation requests available.</p>
+                    ) : filteredRequests.length === 0 ? (
+                        <p>No matching requests found.</p>
                     ) : (
                         <Table striped bordered hover className="dashboard-table">
                             <thead>
@@ -183,23 +284,30 @@ function DashboardPage() {
                             </tr>
                             </thead>
                             <tbody>
-                            {requests.map((request) => (
-                                <tr key={request.id}>
-                                    <td>{request.itemName}</td>
-                                    <td>{request.quantity}</td>
-                                    <td>{request.urgency}</td>
-                                    <td>{request.pickupLocation}</td>
-                                    <td>
-                                        <Button
-                                            variant="primary"
-                                            size="sm"
-                                            onClick={() => handleDonateItem(request)}
-                                        >
-                                            Donate Item
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {requests
+                                .filter((request) =>
+                                    [request.itemName, request.pickupLocation]
+                                        .join(" ")
+                                        .toLowerCase()
+                                        .includes(requestSearchTerm.toLowerCase())
+                                )
+                                .map((request) => (
+                                    <tr key={request.id}>
+                                        <td>{request.itemName}</td>
+                                        <td>{request.quantity}</td>
+                                        <td>{request.urgency}</td>
+                                        <td>{request.pickupLocation}</td>
+                                        <td>
+                                            <Button
+                                                variant="primary"
+                                                size="sm"
+                                                onClick={() => handleDonateItem(request)}
+                                            >
+                                                Donate Item
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </Table>
                     )}
